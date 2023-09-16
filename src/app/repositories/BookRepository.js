@@ -1,6 +1,10 @@
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
 
-let booksList = require('../../db/books.json');
+const booksListParse = fs.readFileSync(path.resolve(__dirname, '../../db/books.json'));
+
+let booksList = JSON.parse(booksListParse);
 
 class BookRepository {
   findAll() {
@@ -29,6 +33,8 @@ class BookRepository {
       author,
       category,
     });
+    const booksListString = JSON.stringify(booksList);
+    fs.writeFileSync(path.resolve(__dirname, '../../db/books.json'), booksListString);
     return row;
   }
 
@@ -36,6 +42,8 @@ class BookRepository {
     booksList = booksList.filter((book) => (
       book.id !== id
     ));
+    const booksListString = JSON.stringify(booksList);
+    fs.writeFileSync(path.resolve(__dirname, '../../db/books.json'), booksListString);
     return true;
   }
 
@@ -52,6 +60,8 @@ class BookRepository {
     const [row] = booksList.filter((book) => (
       book.id === id
     ));
+    const booksListString = JSON.stringify(booksList);
+    fs.writeFileSync(path.resolve(__dirname, '../../db/books.json'), booksListString);
     return row;
   }
 }
